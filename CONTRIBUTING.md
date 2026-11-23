@@ -74,10 +74,10 @@ mdbook build book
 ```
 
 The GitHub Actions workflow in `.github/workflows/kln-accumulator.yml` runs these gates on
-every push to `main` and every pull request, and also builds, runs the seven examples, measures
-coverage, runs the unit tests under `cargo careful`, and checks for unused and outdated
-dependencies. Its `ignored` job runs the 128-bit tests on the weekly schedule and on manual runs
-only.
+every push to `main` and every pull request, and also builds, runs the seven examples, runs the
+unit tests under `cargo careful`, and checks for unused and outdated dependencies. Two jobs run
+only on the weekly schedule and on manual runs: `ignored`, the 128-bit tests, and `coverage`,
+since coverage instrumentation slows the suite too much for every push.
 
 ## House rules
 
