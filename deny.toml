@@ -1,0 +1,34 @@
+[graph]
+all-features = true
+
+[advisories]
+ignore = []
+
+[licenses]
+allow = [
+    "Apache-2.0",
+    "MIT",
+    "Unicode-3.0",
+]
+confidence-threshold = 0.8
+
+# No C in the tree, dev-dependencies included: the crates that compile or bind C are refused.
+[bans]
+deny = [
+    { crate = "bindgen" },
+    { crate = "cc" },
+    { crate = "cmake" },
+    { crate = "pkg-config" },
+]
+highlight = "simplest-path"
+multiple-versions = "warn"
+wildcards = "deny"
+
+[sources]
+allow-git = []
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+unknown-git = "deny"
+unknown-registry = "deny"
+
+[licenses.private]
+ignore = true

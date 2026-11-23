@@ -1,0 +1,5 @@
+# Pinned toolchain: reproducible builds and CI.
+# Bump deliberately alongside a lockfile refresh, never implicitly.
+[toolchain]
+channel = "1.98.1"
+components = ["clippy", "rustfmt"]

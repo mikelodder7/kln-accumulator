@@ -1,0 +1,95 @@
+[package]
+categories = ["cryptography"]
+description = "Lattice-based positive dynamic accumulator of ePrint 2025/1099 in pure Rust"
+edition = "2024"
+keywords = ["accumulator", "lattice", "post-quantum", "cryptography"]
+license = "MIT OR Apache-2.0"
+name = "kln-accumulator"
+publish = false
+version = "0.1.0"
+
+[dependencies]
+crypto-bigint = { default-features = false, features = ["zeroize"], version = "0.7.11" }
+ctutils = { default-features = false, version = "0.4.8" }
+derive_more = { features = ["deref", "from", "into"], version = "2" }
+merlin = { default-features = false, version = "3" }
+ml-dsa = { default-features = false, features = ["alloc", "zeroize"], version = "0.1.2" }
+num_enum = { default-features = false, version = "0.7" }
+rand_core = { default-features = false, version = "0.10" }
+serde = { features = ["derive"], version = "1" }
+serdect = { features = ["alloc"], version = "0.4" }
+sha3 = { default-features = false, features = ["zeroize"], version = "0.11" }
+strum = { default-features = false, features = ["derive"], version = "0.28" }
+thiserror = "2"
+zeroize = { default-features = false, features = ["alloc"], version = "1" }
+
+[dev-dependencies]
+criterion = { default-features = false, features = ["cargo_bench_support"], version = "0.7" }
+hex = "0.4"
+postcard = { default-features = false, features = ["alloc", "use-std"], version = "1" }
+proptest = "1"
+rand = { default-features = false, features = ["std_rng"], version = "0.10" }
+serde_bare = "0.5"
+serde_cbor_2 = "0.13"
+serde_json = "1"
+toml = "1"
+yaml_serde = "0.10"
+
+# Benchmarks are split so the slow ones run alone; `book/src/benchmarks.md` describes each.
+[[bench]]
+harness = false
+name = "construction"
+
+[[bench]]
+harness = false
+name = "paper_128"
+
+[[bench]]
+harness = false
+name = "proofs"
+
+[[bench]]
+harness = false
+name = "samplers"
+
+[[bench]]
+harness = false
+name = "sizes"
+
+[[bench]]
+harness = false
+name = "variants"
+
+[lints.rust]
+missing_debug_implementations = "deny"
+missing_docs = "deny"
+unused_extern_crates = "deny"
+unused_import_braces = "deny"
+unused_lifetimes = "deny"
+unused_parens = "deny"
+unused_qualifications = "deny"
+unused_results = "deny"
+
+[lints.clippy]
+panic = "warn"
+panic_in_result_fn = "warn"
+unwrap_used = "deny"
+
+[lints.rustdoc]
+bare_urls = "deny"
+broken_intra_doc_links = "deny"
+invalid_codeblock_attributes = "deny"
+invalid_html_tags = "deny"
+invalid_rust_codeblocks = "deny"
+missing_crate_level_docs = "deny"
+private_intra_doc_links = "deny"
+redundant_explicit_links = "deny"
+unescaped_backticks = "deny"
+
+# The tests sample lattice preimages and build proofs: they run far longer than they compile, so
+# a plain `cargo test` is optimised too.
+[profile.test]
+opt-level = 3
+
+# A standalone repository, not a member of an enclosing workspace.
+[workspace]

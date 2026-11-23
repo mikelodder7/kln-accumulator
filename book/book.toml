@@ -1,0 +1,11 @@
+[book]
+language = "en"
+src = "src"
+title = "kln-accumulator: a lattice-based positive dynamic accumulator"
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html.playground]
+runnable = false
