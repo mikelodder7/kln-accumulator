@@ -1,5 +1,10 @@
 # kln-accumulator
 
+![Apache2/MIT licensed][license-image]
+![build](https://github.com/mikelodder7/kln-accumulator/actions/workflows/kln-accumulator.yml/badge.svg)
+[![codecov](https://codecov.io/gh/mikelodder7/kln-accumulator/branch/main/graph/badge.svg)](https://codecov.io/gh/mikelodder7/kln-accumulator)
+![MSRV][msrv-image]
+
 A pure-Rust implementation of the lattice-based positive dynamic accumulator of
 [ePrint 2025/1099](https://eprint.iacr.org/2025/1099): an accumulator with free additions,
 deletions that publish one short update message, witnesses that holders update from public
@@ -7,7 +12,23 @@ data alone, and zero-knowledge proofs of membership. Its API mirrors the vb20 pa
 accumulator (same type and method names), so code written against one reads the same against
 the other.
 
-## Status
+## Correspondence with the paper
+
+The paper gives the constructions and parameters but no code, and no known-answer tests exist
+to check against, so this crate claims no byte-level agreement with another implementation.
+What is checked instead:
+
+- every algorithm's correctness equation, by tests at the toy parameter sets, for all three
+  variants;
+- at the 128-bit set, adding, deleting, updating a witness and verifying run, and the public
+  key, the accumulator value and a witness are each within 0.4% of the sizes in Table 2 of the
+  paper (tests marked `#[ignore]`, run weekly in CI);
+- the bytes of each variant's witnesses, public key and accumulator value after a fixed history
+  are pinned by digest, so another platform can confirm it produces the same output;
+- the code points to the parts of the paper it implements, and each deliberate difference is
+  listed in [`security.md`](book/src/security.md) with its reason.
+
+## ⚠️ Security Warning
 
 This is a research implementation. Use it to study and evaluate the scheme, not to protect
 anything.
@@ -29,6 +50,38 @@ anything.
 The book's chapter [`book/src/security.md`](book/src/security.md) says what is proved, under
 which assumptions, and what is not established. [`SECURITY.md`](SECURITY.md) says how to
 report a vulnerability.
+
+USE AT YOUR OWN RISK!
+
+## Minimum Supported Rust Version
+
+This crate requires **Rust 1.98.1** at a minimum, the toolchain pinned in
+`rust-toolchain.toml` and tested in CI.
+
+We may change the MSRV in the future, but it will be accompanied by a minor version bump.
+
+## Details
+
+This crate provides:
+
+- [x] Construction 4.1, at the crate root ✅
+- [x] Construction 4.2, the adaptive variant with ML-DSA-65 handles, in `adaptive` ✅
+- [x] the `ℓ`-succinct variant, in `succinct` ✅ (runs at its toy set only)
+- [x] zero-knowledge membership proofs (Appendix D.2), one-shot and in the vb20 three-step
+  form ✅ (toy sets only)
+- [x] LaBRADOR compression of a membership proof, one to eight levels ✅
+- [x] `ProofSetup`, which expands the proof commitment key once for many proofs ✅
+- [x] Gaussian and ternary trapdoor distributions, Gaussian the default ✅
+
+Parameter sets:
+
+- [x] `ParamsSpec::TOY` and `ParamsSpec::SUCCINCT_TOY`: for tests and examples, no security ✅
+- [x] `ParamsSpec::PAPER_128`: the 128-bit shape of Table 2 of the paper ✅
+- [ ] `ParamsSpec::SUCCINCT_128`: parameters and bounds only; key generation is not practical
+
+A secret key is a function of its parameter set and a seed of at least 32 bytes, so keys can be
+generated deterministically with `SecretKey::new(Some(seed), params, rng)`. Treat the seed with
+the same care as the key.
 
 ## Examples
 
@@ -126,6 +179,22 @@ To read it as a website, build it with [mdBook](https://rust-lang.github.io/mdBo
 mdbook build book    # writes the HTML to book/book/
 ```
 
+## Serialization
+
+Every type that is sent or stored implements `serde`, and has been tested against the
+following formats (byte strings are raw in binary formats and lowercase hex in human-readable
+ones):
+
+- [x] serde_bare
+- [x] postcard
+- [x] serde_cbor_2
+- [x] serde_json
+- [x] yaml_serde
+- [x] toml
+
+The public types also have a packed `to_bytes`, and `from_bytes` decodes against the parameter
+set the receiver already holds; see [`serialization.md`](book/src/serialization.md).
+
 ## References
 
 - ePrint 2025/1099, [Lattice-Based Accumulator and Application to Anonymous Credential
@@ -146,7 +215,22 @@ mdbook build book    # writes the HTML to book/book/
 [`CONTRIBUTING.md`](CONTRIBUTING.md) gives the toolchain, the gate commands and the house
 rules. [`CHANGELOG.md`](CHANGELOG.md) records what each version provides.
 
-## Licence
+## License
 
-Licensed under either of the Apache License, Version 2.0 (`LICENSE-APACHE`) or the MIT licence
-(`LICENSE-MIT`), at your option: `MIT OR Apache-2.0`.
+Licensed under
+
+- [Apache License, Version 2.0](LICENSE-APACHE)
+- [MIT license](LICENSE-MIT)
+
+at your option.
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion
+in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above,
+without any additional terms or conditions.
+
+[//]: # (badges)
+
+[license-image]: https://img.shields.io/badge/license-Apache2.0/MIT-blue.svg
+[msrv-image]: https://img.shields.io/badge/rustc-1.98.1+-blue.svg
