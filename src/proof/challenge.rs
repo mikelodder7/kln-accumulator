@@ -15,7 +15,7 @@
 
 use crate::{error::Result, poly::Poly, ring::Ring};
 use crypto_bigint::U640;
-use sha3::{Shake256Reader, digest::XofReader};
+use shake::{Shake256Reader, digest::XofReader};
 
 /// The ring degree the challenge space is defined for (Figure 2, first row).
 pub(crate) const DEGREE: usize = 64;
@@ -145,7 +145,7 @@ mod tests {
         zq::Coeff,
     };
 
-    fn reader(seed: u8) -> sha3::Shake256Reader {
+    fn reader(seed: u8) -> shake::Shake256Reader {
         xof(
             &Seed::from([seed; 32]),
             DomainLabel::from(&b"test/challenge"[..]),

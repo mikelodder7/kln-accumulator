@@ -24,19 +24,9 @@ use crate::{
 };
 use ml_dsa::{MlDsa65, SigningKey};
 use rand::{SeedableRng, rngs::StdRng};
-use sha3::{
-    block_api::{Sha3HasherCore, Sha3ReaderCore},
-    digest::{
-        block_api::Buffer,
-        block_buffer::ReadBuffer,
-        consts::{U0, U136},
-    },
-};
+use shake::Shake256;
 use std::sync::Arc;
 use zeroize::Zeroize;
-
-/// The SHAKE padding byte, the `PAD` parameter of SHAKE256's hasher core.
-const SHAKE_PAD: u8 = 0x1f;
 
 /// The keys of all three variants, the ML-DSA signing key inside the adaptive one, and the
 /// trapdoor with every form of it the sampler builds.
@@ -51,19 +41,17 @@ fn keys_and_trapdoors_are_wiped() {
     wiped_on_drop::<NttMatrix>();
 }
 
-/// Seeds, the uniform stream drawn from one, and the SHAKE256 hasher and reader parts that
-/// absorb root seeds, PRF keys and the state-tag key: `Shake256` is a `Sha3HasherCore` with a
-/// block buffer and `Shake256Reader` a `Sha3ReaderCore` with a read buffer, and with `sha3`'s
-/// `zeroize` feature each part overwrites itself when dropped.
+/// Seeds, the uniform stream drawn from one, and the SHAKE256 hasher that absorbs root seeds,
+/// PRF keys and the state-tag key. With `shake`'s `zeroize` feature, `Shake256` overwrites its
+/// Keccak state and sponge cursor when dropped. `Shake256Reader` does the same in its `Drop`
+/// (shake 0.1.0, `src/lib.rs`), but does not implement the `ZeroizeOnDrop` marker, so it cannot
+/// be checked here.
 #[test]
 fn seeds_and_streams_are_wiped() {
     wiped_on_drop::<Seed>();
     wiped_on_drop::<UniformSampler>();
     wiped_on_drop::<Uniform<'_>>();
-    wiped_on_drop::<Sha3HasherCore<U136, U0, SHAKE_PAD>>();
-    wiped_on_drop::<Buffer<Sha3HasherCore<U136, U0, SHAKE_PAD>>>();
-    wiped_on_drop::<Sha3ReaderCore<U136>>();
-    wiped_on_drop::<ReadBuffer<U136>>();
+    wiped_on_drop::<Shake256>();
     wiped_on_drop::<StateTag>();
 }
 

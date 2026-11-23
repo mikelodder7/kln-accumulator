@@ -173,9 +173,7 @@ jobs:
       - run: cargo binstall --no-confirm cargo-udeps
       - run: cargo +nightly udeps --all-targets --all-features
 
-  # Two crates are held back on purpose. criterion stays at 0.7: 0.8 depends on a crate that
-  # compiles C. sha3 stays at 0.11: 0.12 drops SHAKE256, which moved to the separate `shake`
-  # crate, so the upgrade means a new dependency.
+  # criterion stays at 0.7 on purpose: 0.8 depends on a crate that compiles C.
   outdated:
     runs-on: ubuntu-latest
     steps:
@@ -185,4 +183,4 @@ jobs:
           toolchain: 1.98.1
       - uses: cargo-bins/cargo-binstall@main
       - run: cargo binstall --no-confirm cargo-outdated
-      - run: cargo outdated --root-deps-only --exit-code 1 --ignore criterion --ignore sha3
+      - run: cargo outdated --root-deps-only --exit-code 1 --ignore criterion

@@ -11,7 +11,7 @@ use crate::{
 };
 use rand_core::CryptoRng;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use sha3::digest::XofReader;
+use shake::digest::XofReader;
 use std::sync::Arc;
 
 /// Label of [`Element::hash`].

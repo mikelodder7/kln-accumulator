@@ -21,7 +21,7 @@ use core::fmt;
 use ctutils::CtEq;
 use num_enum::IntoPrimitive;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use sha3::digest::XofReader;
+use shake::digest::XofReader;
 use std::collections::{BTreeMap, BTreeSet};
 use strum::{EnumCount, EnumIter};
 use zeroize::{Zeroize, ZeroizeOnDrop};

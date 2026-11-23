@@ -13,7 +13,7 @@
 //! A [`Seed`] may be secret (root seeds, PRF keys, the state-tag key) or public (the seed of
 //! the proof commitment key), so every seed is treated as secret: it is overwritten when
 //! dropped, compared in constant time, and printed without its bytes. The SHAKE256 hasher
-//! and reader behind every stream are built with `sha3`'s `zeroize` feature, so their Keccak
+//! and reader behind every stream are built with `shake`'s `zeroize` feature, so their Keccak
 //! state, from which the absorbed seed could be recovered by inverting the permutation, is
 //! overwritten when they are dropped.
 //!
@@ -45,7 +45,7 @@ use crate::{
 };
 use core::fmt;
 use ctutils::CtEq;
-use sha3::{
+use shake::{
     Shake256, Shake256Reader,
     digest::{ExtendableOutput, Update, XofReader},
 };
@@ -251,7 +251,7 @@ pub(crate) fn hash_to_seed(label: DomainLabel<'_>, parts: &[&[u8]]) -> Seed {
     Seed::read_from(&mut hash_parts(label, parts))
 }
 
-/// With `sha3`'s `zeroize` feature the SHAKE256 reader overwrites its state when dropped. The
+/// With `shake`'s `zeroize` feature the SHAKE256 reader overwrites its state when dropped. The
 /// state matters even though the sampled values are public: Keccak-f is a permutation, so the
 /// state of a stream gives back the seed it absorbed.
 impl ZeroizeOnDrop for UniformSampler {}

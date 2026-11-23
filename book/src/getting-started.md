@@ -26,8 +26,8 @@ The crate is pure Rust, with no `unsafe` code (`#![forbid(unsafe_code)]`) and no
 dependencies. Every crate in the normal dependency graph is offered under MIT or Apache-2.0;
 `unicode-ident`, used at build time by the derive macros, also carries Unicode-3.0 for its
 data tables. `deny.toml` holds the licence and source policy that `cargo deny check` enforces,
-and new dependencies are added only after review. The cryptographic building blocks are SHA-3
-and SHAKE256 (`sha3`), ML-DSA-65 (`ml-dsa`), merlin transcripts, constant-time comparisons
+and new dependencies are added only after review. The cryptographic building blocks are
+SHAKE256 (`shake`), ML-DSA-65 (`ml-dsa`), merlin transcripts, constant-time comparisons
 (`ctutils`), big integers (`crypto-bigint`) and `zeroize`. No classical cryptography is used.
 
 ## Building and testing

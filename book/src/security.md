@@ -325,7 +325,7 @@ chosen by a rule of thumb; and the proofs run only at the toy sets.
 
 Inside the crate, every intermediate that depends on a secret is wiped when it goes out of
 scope, on every return path: derived seeds, PRF outputs, the SHAKE256 state that absorbed a
-secret (through the `zeroize` feature of `sha3`), the sampler's draws and buffers, the
+secret (through the `zeroize` feature of `shake`), the sampler's draws and buffers, the
 prover's masks and rejected responses, and the byte buffers that secret values are encoded
 into or decoded from.
 

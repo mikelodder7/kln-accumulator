@@ -48,7 +48,7 @@ use crypto_bigint::U512;
 use merlin::Transcript;
 use rand_core::CryptoRng;
 use serde::{Deserialize, Serialize};
-use sha3::{Shake256Reader, digest::XofReader};
+use shake::{Shake256Reader, digest::XofReader};
 use zeroize::{ZeroizeOnDrop, Zeroizing};
 
 /// Label of the prover's mask stream for one attempt.

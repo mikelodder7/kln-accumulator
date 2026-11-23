@@ -26,7 +26,7 @@ use crate::{
 };
 use core::{fmt, num::NonZeroU32};
 use crypto_bigint::{Limb, NonZero, U128, U384, U512, U768};
-use sha3::{Shake256Reader, digest::XofReader};
+use shake::{Shake256Reader, digest::XofReader};
 use zeroize::Zeroizing;
 
 /// The radix `K` of the wide sampler.
@@ -374,7 +374,7 @@ mod tests {
         );
         let stream = (0..4096).map(|_| {
             let mut bytes = [0u8; 16];
-            sha3::digest::XofReader::read(&mut reader, &mut bytes);
+            shake::digest::XofReader::read(&mut reader, &mut bytes);
             u128::from_le_bytes(bytes)
         });
         let edges = gaussian

@@ -42,7 +42,7 @@ use core::{fmt, num::NonZeroU32};
 use crypto_bigint::{Limb, NonZero, U512};
 use ctutils::CtEq;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use sha3::{Shake256Reader, digest::XofReader};
+use shake::{Shake256Reader, digest::XofReader};
 use zeroize::{Zeroize, ZeroizeOnDrop, Zeroizing};
 
 /// XOF label of the uniform block `Ā` in `TrapGen`.
@@ -646,7 +646,7 @@ mod tests {
         vector::PolyVec,
     };
     use crypto_bigint::U512;
-    use sha3::digest::XofReader;
+    use shake::digest::XofReader;
     use zeroize::{ZeroizeOnDrop, Zeroizing};
 
     fn seed(i: u32) -> Seed {

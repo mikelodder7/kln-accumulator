@@ -87,7 +87,7 @@ use crate::{
 use abdlop::CommitmentKey;
 use merlin::Transcript;
 use rand_core::CryptoRng;
-use sha3::digest::XofReader;
+use shake::digest::XofReader;
 use std::sync::Arc;
 
 /// Label of the hash that derives [`ProofParams`].

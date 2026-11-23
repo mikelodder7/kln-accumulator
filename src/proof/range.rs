@@ -17,7 +17,7 @@ use crate::{
     zq::Coeff,
 };
 use crypto_bigint::NonZero;
-use sha3::digest::XofReader;
+use shake::digest::XofReader;
 
 /// Label of the stream `R` is drawn from.
 const LABEL_R: &[u8] = b"kln/lnp/range/r";

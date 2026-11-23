@@ -60,7 +60,7 @@ use crate::{
     proof::challenge::{Coefficients, DEGREE, power_norm_at_most},
     ring::Ring,
 };
-use sha3::{Shake256Reader, digest::XofReader};
+use shake::{Shake256Reader, digest::XofReader};
 
 /// The number of coefficients `±1` (Section 2 uses 31).
 pub(crate) const ONES: usize = 32;
@@ -142,7 +142,7 @@ mod tests {
 
     const ZEROS: usize = DEGREE - ONES - TWOS;
 
-    fn reader(seed: u8) -> sha3::Shake256Reader {
+    fn reader(seed: u8) -> shake::Shake256Reader {
         xof(
             &Seed::from([seed; 32]),
             DomainLabel::from(&b"test/labrador/challenge"[..]),

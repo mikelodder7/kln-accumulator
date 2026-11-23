@@ -114,7 +114,7 @@ pub(crate) use gadget::GadgetSampler;
 pub(crate) use perturbation::Perturbation;
 
 use core::fmt;
-use sha3::{Shake256Reader, digest::XofReader};
+use shake::{Shake256Reader, digest::XofReader};
 use zeroize::{Zeroize, ZeroizeOnDrop, Zeroizing};
 
 /// The tail cut: every draw over `Z` lies within this many standard deviations of its centre.
@@ -341,7 +341,7 @@ mod tests {
     use crate::sample::{DomainLabel, Seed, xof};
     use std::path::Path;
 
-    fn stream(seed: u8) -> sha3::Shake256Reader {
+    fn stream(seed: u8) -> shake::Shake256Reader {
         xof(
             &Seed::from([seed; 32]),
             DomainLabel::from(&b"kln/test/preimage"[..]),
